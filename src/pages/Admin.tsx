@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 interface EndpointStat {
   id: number;
@@ -18,6 +19,7 @@ interface UserStat {
 function Admin() {
   const [endpointStats, setEndpointStats] = useState<EndpointStat[]>([]);
   const [userStats, setUserStats] = useState<UserStat[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchEndpointStats();
@@ -42,10 +44,19 @@ function Admin() {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await axios.post('endpoint'); // replace with actual logout endpoint
+      navigate('/login');
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
+
   return (
     <div>
       <h1>Admin Dashboard</h1>
-
+      <button onClick={handleLogout}>Logout</button>
       <h2>Endpoint Stats</h2>
       <table>
         <thead>

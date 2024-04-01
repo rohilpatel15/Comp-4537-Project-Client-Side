@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 interface UserAPIUsage {
   endpoint: string;
@@ -9,6 +10,7 @@ interface UserAPIUsage {
 function UserPage() {
   const [apiUsage, setApiUsage] = useState<UserAPIUsage[]>([]);
   const [totalUsage, setTotalUsage] = useState<number>(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchAPIUsage();
@@ -27,10 +29,19 @@ function UserPage() {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await axios.post('endpoint'); // replace with actual logout endpoint
+      navigate('/login');
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
+
   return (
     <div>
       <h1>User Page</h1>
-
+      <button onClick={handleLogout}>Logout</button>
       <h2>API Consumption</h2>
       <table>
         <thead>
