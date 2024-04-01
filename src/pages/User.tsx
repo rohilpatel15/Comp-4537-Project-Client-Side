@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios, {AxiosError} from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 interface UserAPIUsage {
@@ -18,24 +18,39 @@ function UserPage() {
 
   const fetchAPIUsage = async () => {
     try {
-      const response = await axios.get<UserAPIUsage[]>('endpoint'); // replace with user usage endpoint
-      setApiUsage(response.data);
+      // Get JWT token from localStorage (assuming it was stored after login)
+      const token = localStorage.getItem('token');
       
-      // Calculate total API usage
+      if (!token) {
+        navigate('/login'); // Redirect to login if token is not available
+        return;
+      }
+
+      // Include JWT token in Authorization header of the request
+      const response = await axios.get<UserAPIUsage[]>('endpoint', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setApiUsage(response.data);
+
       const total = response.data.reduce((acc, curr) => acc + curr.requests, 0);
       setTotalUsage(total);
-    } catch (error) {
+    } catch (error: unknown) { // Explicitly type error as AxiosError
       console.error('Error fetching API usage:', error);
+
+      // Handle AxiosError to access response status
+      if ((error as AxiosError).response?.status === 401) {
+        localStorage.removeItem('token'); // Remove invalid/expired token
+        navigate('/login'); // Redirect to login page
+      }
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await axios.post('endpoint'); // replace with actual logout endpoint
-      navigate('/login');
-    } catch (error) {
-      console.error('Error logging out:', error);
-    }
+  const handleLogout = () => {
+    localStorage.removeItem('token'); // Remove token on logout
+    navigate('/login'); // Redirect to login page
   };
 
   return (

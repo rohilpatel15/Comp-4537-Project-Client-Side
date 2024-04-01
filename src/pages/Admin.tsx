@@ -28,28 +28,58 @@ function Admin() {
 
   const fetchEndpointStats = async () => {
     try {
-      const response = await axios.get<EndpointStat[]>('endpoint'); // replace with api request endpoint
+      const token = localStorage.getItem('token'); // Get JWT token from localStorage
+      if (!token) {
+        navigate('/login'); // Redirect to login if token is not available
+        return;
+      }
+
+      const response = await axios.get<EndpointStat[]>('endpoint', {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include JWT token in Authorization header
+        },
+      });
       setEndpointStats(response.data);
     } catch (error) {
       console.error('Error fetching endpoint stats:', error);
+      handleAuthenticationError(error);
     }
   };
 
   const fetchUserStats = async () => {
     try {
-      const response = await axios.get<UserStat[]>('endpoint'); // replace with user stats endpoint
+      const token = localStorage.getItem('token');
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
+      const response = await axios.get<UserStat[]>('endpoint', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setUserStats(response.data);
     } catch (error) {
       console.error('Error fetching user stats:', error);
+      handleAuthenticationError(error);
     }
   };
 
   const handleLogout = async () => {
     try {
       await axios.post('endpoint'); // replace with actual logout endpoint
+      localStorage.removeItem('token'); // Remove token on logout
       navigate('/login');
     } catch (error) {
       console.error('Error logging out:', error);
+    }
+  };
+
+  const handleAuthenticationError = (error: any) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token'); // Remove invalid/expired token
+      navigate('/login'); // Redirect to login page
     }
   };
 

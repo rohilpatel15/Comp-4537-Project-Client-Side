@@ -11,18 +11,22 @@ function SignUp() {
     e.preventDefault();
     
     try {
-      const response = await axios.post('endpoint', { email, password }); // replace with api endpoint
-      if (response.data.success) {
-        alert('Signup successful!');
-        navigate('/user');
-      } else {
-        alert('Signup failed. Please try again.');
+        const response = await axios.post('endpoint', { email, password }); // replace with signup API endpoint
+        const token = response.data.token; // Assuming the backend returns a token upon successful signup
+  
+        if (token) {
+          localStorage.setItem('token', token); // Store the token in localStorage
+  
+          alert('Signup successful!');
+          navigate('/user');
+        } else {
+          alert('Signup failed. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error signing up:', error);
+        alert('An error occurred. Please try again later.');
       }
-    } catch (error) {
-      console.error('Error signing up:', error);
-      alert('An error occurred. Please try again later.');
-    }
-  };
+    };
 
   return (
     <div className="SignUpFields">
