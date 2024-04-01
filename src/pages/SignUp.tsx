@@ -9,24 +9,21 @@ function SignUp() {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
-        const response = await axios.post('endpoint', { email, password }); // replace with signup API endpoint
-        const token = response.data.token; // Assuming the backend returns a token upon successful signup
+      const response = await axios.post('https://dolphin-app-jewdr.ondigitalocean.app/auth/register', { email, password });
   
-        if (token) {
-          localStorage.setItem('token', token); // Store the token in localStorage
-  
-          alert('Signup successful!');
-          navigate('/user');
-        } else {
-          alert('Signup failed. Please try again.');
-        }
-      } catch (error) {
-        console.error('Error signing up:', error);
-        alert('An error occurred. Please try again later.');
+      if (response.status === 201) {
+        alert('Signup successful!');
+        navigate('/login'); // Redirect to login page after successful signup
+      } else {
+        alert('Signup failed. Please try again.');
       }
-    };
+    } catch (error) {
+      console.error('Error signing up:', error);
+      alert('An error occurred. Please try again later.');
+    }
+  };
 
   return (
     <div className="SignUpFields">

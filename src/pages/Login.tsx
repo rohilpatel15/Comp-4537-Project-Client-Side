@@ -11,26 +11,26 @@ function Login() {
     e.preventDefault();
 
     try {
-        const response = await axios.post('endpoint', { email, password }); // replace with login API endpoint
+      const response = await axios.post('https://dolphin-app-jewdr.ondigitalocean.app/auth/login', { email, password });
+  
+      if (response.status === 200) {
         const token = response.data.token; // Assuming the backend returns a token upon successful login
+        localStorage.setItem('token', token); // Store the token in localStorage
   
-        if (token) {
-          localStorage.setItem('token', token); // Store the token in localStorage
-  
-          alert('Login successful!');
-          if (email === 'admin@admin.com') {
-            navigate('/admin');
-          } else {
-            navigate('/user');
-          }
+        alert('Login successful!');
+        if (email === 'admin@admin.com') {
+          navigate('/admin');
         } else {
-          alert('Email or password incorrect. Please try again.');
+          navigate('/user');
         }
-      } catch (error) {
-        console.error('Error logging in:', error);
-        alert('An error occurred. Please try again later.');
+      } else {
+        alert('Email or password incorrect. Please try again.');
       }
-    };
+    } catch (error) {
+      console.error('Error logging in:', error);
+      alert('An error occurred. Please try again later.');
+    }
+  };
 
   return (
     <div className="LoginFields">
