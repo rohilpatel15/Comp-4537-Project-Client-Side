@@ -11,7 +11,7 @@ function SignUp() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('https://dolphin-app-jewdr.ondigitalocean.app/auth/register', { email, password });
+      const response = await axios.post('https://dolphin-app-jewdr.ondigitalocean.app/auth/register', { email, password }); // Send POST request to Quan's DB
   
       if (response.status === 201) {
         alert('Signup successful!');

@@ -12,9 +12,8 @@ function UserPage() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Remove the JWT token from localStorage
-    // Redirect to the login page or any other appropriate action
-    window.location.href = '/login'; // Replace '/login' with your actual login page URL
+    localStorage.removeItem('token');
+    window.location.href = '/login';
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -47,7 +46,7 @@ function UserPage() {
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError;
         console.error('Error fetching AI-generated story:', axiosError);
-        console.log('Response data:', axiosError.response?.data); // Log response data in case of error
+        console.log('Response data:', axiosError.response?.data); // Debugging error when trying to fetch AI-generated story
       } else {
         console.error('Unknown error:', error);
       }

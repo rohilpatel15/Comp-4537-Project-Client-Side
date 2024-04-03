@@ -11,14 +11,15 @@ function Login() {
     e.preventDefault();
 
     try {
+      // Send POST request to Quan's DB to retrieve JWT upon successful login
       const response = await axios.post('https://dolphin-app-jewdr.ondigitalocean.app/auth/login', { email, password });
   
       if (response.status === 200) {
-        const token = response.data.token; // Assuming the backend returns a token upon successful login
+        const token = response.data.token; // Extract JWT token from response
         localStorage.setItem('token', token); // Store the token in localStorage
   
         alert('Login successful!');
-        if (email === 'admin@admin.com') {
+        if (email === 'admin@admin.com') { // Redirect to admin page if email is admin
           navigate('/admin');
         } else {
           navigate('/user');
