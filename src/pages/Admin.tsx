@@ -68,7 +68,6 @@ function Admin() {
 
   const handleLogout = async () => {
     try {
-      await axios.post('endpoint'); // replace with actual logout endpoint
       localStorage.removeItem('token'); // Remove token on logout
       navigate('/login');
     } catch (error) {
@@ -88,44 +87,6 @@ function Admin() {
       <h1>Admin Dashboard</h1>
       <button onClick={handleLogout}>Logout</button>
       <h2>Endpoint Stats</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Method</th>
-            <th>Endpoint</th>
-            <th>Requests</th>
-          </tr>
-        </thead>
-        <tbody>
-          {endpointStats.map((stat) => (
-            <tr key={stat.id}>
-              <td>{stat.method}</td>
-              <td>{stat.endpoint}</td>
-              <td>{stat.requests}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <h2>User Stats</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>User Name</th>
-            <th>Email</th>
-            <th>Total Requests</th>
-          </tr>
-        </thead>
-        <tbody>
-          {userStats.map((user) => (
-            <tr key={user.id}>
-              <td>{user.username}</td>
-              <td>{user.email}</td>
-              <td>{user.totalRequests}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
     </div>
   );
 }
