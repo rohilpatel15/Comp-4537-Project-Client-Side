@@ -12,9 +12,10 @@ function Login() {
 
     try {
       // Send POST request to Quan's DB to retrieve JWT upon successful login
-      const response = await axios.post('https://dolphin-app-jewdr.ondigitalocean.app/auth/login', { email, password });
-  
+      const response = await axios.post('https://dolphin-app-jewdr.ondigitalocean.app/auth/login', { email, password, withCredentials: true});
+      
       if (response.status === 200) {
+        console.log(response.headers);
         const token = response.data.token; // Extract JWT token from response
         localStorage.setItem('token', token); // Store the token in localStorage
   
